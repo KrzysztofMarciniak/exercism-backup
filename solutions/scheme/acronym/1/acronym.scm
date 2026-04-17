@@ -1,0 +1,20 @@
+(import (rnrs))
+
+(define (letter? c)
+  (char-alphabetic? c))
+
+(define (word-char? c)
+  (or (char-alphabetic? c)
+      (char=? c #\')))
+
+(define (acronym s)
+  (let ((n (string-length s)))
+    (let loop ((i 0) (out '()))
+      (if (= i n)
+          (list->string (reverse out))
+          (let ((c (string-ref s i)))
+            (if (and (char-alphabetic? c)
+                     (or (= i 0)
+                         (not (word-char? (string-ref s (- i 1))))))
+                (loop (+ i 1) (cons (char-upcase c) out))
+                (loop (+ i 1) out)))))))
